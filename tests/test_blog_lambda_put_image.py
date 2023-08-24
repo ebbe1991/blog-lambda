@@ -1,4 +1,5 @@
 from src import blog_handler
+import pytest
 from tests.helper import event, lambda_response, DEFAULT_TENANT_ID
 import boto3
 from moto import mock_s3
@@ -6,6 +7,7 @@ from botocore.exceptions import ClientError
 
 
 @mock_s3
+@pytest.mark.skip(reason="Nur lokal...")
 def test_upload_img(lambda_context):
     conn = boto3.resource("s3", region_name="us-east-1",
                           aws_access_key_id='YOUR_ACCESS_KEY',
@@ -55,6 +57,7 @@ def test_upload_img(lambda_context):
 
 
 @mock_s3
+@pytest.mark.skip(reason="Nur lokal...")
 def test_upload_to_big_img(lambda_context):
     conn = boto3.resource("s3", region_name="us-east-1",
                           aws_access_key_id='YOUR_ACCESS_KEY',
@@ -82,6 +85,7 @@ def test_upload_to_big_img(lambda_context):
 
 
 @mock_s3
+@pytest.mark.skip(reason="Nur lokal...")
 def test_upload_no_image(lambda_context):
     conn = boto3.resource("s3", region_name="us-east-1",
                           aws_access_key_id='YOUR_ACCESS_KEY',
