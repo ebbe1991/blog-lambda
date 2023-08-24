@@ -2,22 +2,29 @@ import os
 
 import boto3
 import pytest
-from moto import mock_dynamodb
+from moto import mock_dynamodb, mock_s3
 
 os.environ['BLOG_TABLE_NAME'] = 'BLOG_TABLE'
-os.environ['AWS_DEFAULT_REGION'] = 'eu-central-1'
+os.environ['AWS_DEFAULT_REGION'] = 'us-east-1'
+os.environ['AWS_REGION'] = 'us-east-1'
+os.environ['BLOG_S3_BUCKET'] = 'my-test-bucket'
 
 
 @pytest.fixture(name='lambda_context')
 def lambda_context():
     return None
 
-
 @pytest.fixture(scope='session')
 def dynamodb():
     with mock_dynamodb():
         yield boto3.resource('dynamodb')
 
+@mock_s3
+@pytest.fixture(scope='function')
+def s3_bucket():
+    bucket = os.getenv('BLOG_S3_BUCKET')
+    conn = boto3.resource("s3")
+    conn.create_bucket(Bucket=bucket)
 
 @pytest.fixture(scope='function')
 def dynamodb_table(dynamodb):

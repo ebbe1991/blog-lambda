@@ -1,5 +1,6 @@
 from aws_lambda_powertools.event_handler import APIGatewayHttpResolver
 import blog_controller
+import img_controller
 from blog_controller import BlogDTO
 from lambda_utils.response_utils import response, empty_response, to_json_array
 from lambda_utils.event_utils import extract_body, extract_tenant, extract_stichtag, extract_count
@@ -65,3 +66,20 @@ def delete(id):
 @app.exception_handler(ValidationException)
 def handle_http_exception(exception: ValidationException):
     return response(exception.http_status, exception.to_json())
+
+
+@app.put('/api/blog/<id>/image')
+def put_img(id):
+    event = app.current_event
+    tenant_id = extract_tenant(event)
+    body = body = event.decoded_body
+    img_controller.put_image(tenant_id, id, body)
+    return empty_response(204)
+
+
+@app.delete('/api/blog/<id>/image')
+def delete_img(id):
+    event = app.current_event
+    tenant_id = extract_tenant(event)
+    img_controller.delete_image(tenant_id, id)
+    return empty_response(204)
