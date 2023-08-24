@@ -7,7 +7,9 @@ from botocore.exceptions import ClientError
 
 @mock_s3
 def test_upload_img(lambda_context):
-    conn = boto3.resource("s3", region_name="us-east-1")
+    conn = boto3.resource("s3", region_name="us-east-1",
+                          aws_access_key_id='YOUR_ACCESS_KEY',
+                          aws_secret_access_key='YOUR_SECRET_KEY')
     conn.create_bucket(Bucket='my-test-bucket')
 
     pathParameters = {
@@ -54,7 +56,9 @@ def test_upload_img(lambda_context):
 
 @mock_s3
 def test_upload_to_big_img(lambda_context):
-    conn = boto3.resource("s3", region_name="us-east-1")
+    conn = boto3.resource("s3", region_name="us-east-1",
+                          aws_access_key_id='YOUR_ACCESS_KEY',
+                          aws_secret_access_key='YOUR_SECRET_KEY')
     conn.create_bucket(Bucket='my-test-bucket')
 
     pathParameters = {
@@ -79,7 +83,9 @@ def test_upload_to_big_img(lambda_context):
 
 @mock_s3
 def test_upload_no_image(lambda_context):
-    conn = boto3.resource("s3", region_name="us-east-1")
+    conn = boto3.resource("s3", region_name="us-east-1",
+                          aws_access_key_id='YOUR_ACCESS_KEY',
+                          aws_secret_access_key='YOUR_SECRET_KEY')
     conn.create_bucket(Bucket='my-test-bucket')
 
     pathParameters = {

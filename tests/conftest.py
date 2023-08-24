@@ -14,17 +14,22 @@ os.environ['BLOG_S3_BUCKET'] = 'my-test-bucket'
 def lambda_context():
     return None
 
+
 @pytest.fixture(scope='session')
 def dynamodb():
     with mock_dynamodb():
         yield boto3.resource('dynamodb')
 
+
 @mock_s3
 @pytest.fixture(scope='function')
 def s3_bucket():
     bucket = os.getenv('BLOG_S3_BUCKET')
-    conn = boto3.resource("s3")
+    conn = boto3.resource("s3", region_name="us-east-1",
+                          aws_access_key_id='YOUR_ACCESS_KEY',
+                          aws_secret_access_key='YOUR_SECRET_KEY')
     conn.create_bucket(Bucket=bucket)
+
 
 @pytest.fixture(scope='function')
 def dynamodb_table(dynamodb):
