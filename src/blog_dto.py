@@ -17,6 +17,7 @@ def create(item: dict):
     gueltigBis = item.get('gueltigBis')
     gueltigVonDate = None if gueltigVon is None else fromisoformat(gueltigVon)
     gueltigBisDate = None if gueltigBis is None else fromisoformat(gueltigBis)
+    hasPicture = item.get('hasPicture') or False
     check_daterange(gueltigVonDate, gueltigBisDate)
     return BlogDTO(
         betreff,
@@ -24,13 +25,14 @@ def create(item: dict):
         introtext,
         gueltigVonDate,
         gueltigBisDate,
+        hasPicture,
         item.get('id')
     )
 
 
 class BlogDTO:
 
-    def __init__(self, betreff: str, nachricht: str, introtext: str, gueltigVon: date, gueltigBis: date, id: str = None):
+    def __init__(self, betreff: str, nachricht: str, introtext: str, gueltigVon: date, gueltigBis: date, hasPicture: bool = False, id: str = None):
         if id:
             self.id = id
         else:
@@ -40,6 +42,7 @@ class BlogDTO:
         self.introtext = introtext
         self.gueltigVon = gueltigVon
         self.gueltigBis = gueltigBis
+        self.hasPicture = hasPicture
         self.ttl = compute_ttl_for_date(gueltigBis, 7) if getenv_as_boolean(
             'TTL_FEATURE_ACTIVE', True) else None
 

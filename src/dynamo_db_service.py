@@ -21,6 +21,7 @@ def put_blog_item(tenant_id: str, blog_item: BlogDTO):
             'introtext': blog_item.introtext,
             'gueltigVon': blog_item.gueltigVon.isoformat() if blog_item.gueltigVon is not None else None,
             'gueltigBis': blog_item.gueltigBis.isoformat() if blog_item.gueltigBis is not None else None,
+            'hasPicture': blog_item.hasPicture,
             'ttl': blog_item.ttl
         }
     )

@@ -31,7 +31,7 @@ def test_update_blog_item_ok(lambda_context, dynamodb_table):
         '/api/blog/{id}', 'PUT', json.dumps(itemUpdate), pathParameters), lambda_context)
 
     assert response == lambda_response(200, BlogDTO(
-        "Test", "Eine Testnachricht (aktualisiert)", "Eine Einleitung (aktualisiert)", date.fromisoformat("2022-01-01"), date.fromisoformat("2022-02-01"), createdblog_item.id).to_json())
+        "Test", "Eine Testnachricht (aktualisiert)", "Eine Einleitung (aktualisiert)", date.fromisoformat("2022-01-01"), date.fromisoformat("2022-02-01"), False, createdblog_item.id).to_json())
 
 
 def test_update_blog_item_required_field_to_null_not_ok(lambda_context, dynamodb_table):
@@ -101,7 +101,7 @@ def test_update_blog_item_set_null_value(lambda_context, dynamodb_table):
         '/api/blog/{id}', 'PUT', json.dumps(itemUpdate), pathParameters), lambda_context)
 
     assert response == lambda_response(200, BlogDTO(
-        "Test", "Eine Testnachricht (aktualisiert)", None, date.fromisoformat("2022-01-01"), None, createdblog_item.id).to_json())
+        "Test", "Eine Testnachricht (aktualisiert)", None, date.fromisoformat("2022-01-01"), None, False, createdblog_item.id).to_json())
 
 
 def test_update_blog_item_without_body_not_ok(lambda_context, dynamodb_table):

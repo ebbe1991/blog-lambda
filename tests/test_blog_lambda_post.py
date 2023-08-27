@@ -19,7 +19,7 @@ def test_create_blog_item_ok(lambda_context, dynamodb_table):
 
     assert id is not None
     assert response == lambda_response(201, BlogDTO(
-        "Test", "Eine Testnachricht", None, date.fromisoformat("2022-01-01"), date.fromisoformat("2022-02-01"), id).to_json())
+        "Test", "Eine Testnachricht", None, date.fromisoformat("2022-01-01"), date.fromisoformat("2022-02-01"), False, id).to_json())
 
 
 def test_create_blog_item_invalid_dateformat_bad_request(lambda_context, dynamodb_table):
@@ -73,7 +73,7 @@ def test_create_blog_item_without_optional_parameters_ok(lambda_context, dynamod
 
     assert id is not None
     assert response == lambda_response(201, BlogDTO(
-        "Test", "Eine Testnachricht", None, None, None, id).to_json())
+        "Test", "Eine Testnachricht", None, None, None, False, id).to_json())
 
 
 
@@ -111,5 +111,5 @@ def test_create_blog_item_with_optional_introtext_ok(lambda_context, dynamodb_ta
 
     assert id is not None
     assert response == lambda_response(201, BlogDTO(
-        "Test", "Eine Testnachricht", "Eine Einleitung", date.fromisoformat("2022-01-01"), None, id).to_json())
+        "Test", "Eine Testnachricht", "Eine Einleitung", date.fromisoformat("2022-01-01"), None, False, id).to_json())
 

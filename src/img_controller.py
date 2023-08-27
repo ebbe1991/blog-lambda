@@ -1,6 +1,8 @@
 import os
+import json
 import boto3
 from lambda_utils.exception import ValidationException
+from src.blog_controller import update_blog_item, get_blog_item
 
 s3_bucket_name = os.getenv('BLOG_S3_BUCKET')
 s3 = boto3.client('s3')
@@ -20,11 +22,21 @@ def put_image(tenant_id, id, body):
         raise ValidationException("Datei ist kein PNG oder JPG.")
 
     s3.put_object(Body=body, Bucket=s3_bucket_name, Key=image_key)
+    item = get_blog_item(tenant_id=tenant_id, id=id)
+    item.hasPicture = True
+    update_blog_item(tenant_id=tenant_id,
+                     id=id,
+                     dto=json.loads(item.to_json()))
 
 
 def delete_image(tenant_id, id):
     image_key = get_image_key(tenant_id, id)
     s3.delete_object(Bucket=s3_bucket_name, Key=image_key)
+    item = get_blog_item(tenant_id=tenant_id, id=id)
+    item.hasPicture = False
+    update_blog_item(tenant_id=tenant_id,
+                     id=id,
+                     dto=json.loads(item.to_json()))
 
 
 def get_image_key(tenant_id: str, id: str) -> str:
