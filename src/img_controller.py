@@ -2,7 +2,7 @@ import os
 import json
 import boto3
 from lambda_utils.exception import ValidationException
-from src.blog_controller import update_blog_item, get_blog_item
+from blog_controller import update_blog_item, get_blog_item
 
 s3_bucket_name = os.getenv('BLOG_S3_BUCKET')
 s3 = boto3.client('s3')
