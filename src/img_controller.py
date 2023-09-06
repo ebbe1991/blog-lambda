@@ -8,6 +8,30 @@ s3_bucket_name = os.getenv('BLOG_S3_BUCKET')
 s3 = boto3.client('s3')
 
 
+def request_put_image(tenant_id, id) -> str:
+    image_key = get_image_key(tenant_id, id)
+
+    max_file_size_bytes = 2 * 1024 * 1024
+    # Bedingungen für die URL festlegen
+    conditions = [
+        {"acl": "private"},
+        # Erlaubt beliebige Schlüssel (Dateinamen)
+        {"success_action_status": "201"},  # HTTP-Statuscode 201 im Erfolgsfall
+        # Erlaubt alle Bild-Content-Types
+        ["starts-with", "$Content-Type", "image/"],
+        ["content-length-range", 1, max_file_size_bytes]  # Maximale Dateigröße
+    ]
+    # Presigned URL erstellen
+    url = s3.generate_presigned_post(
+        Bucket=s3_bucket_name,
+        Key=image_key,
+        ExpiresIn=3600,  # Gültigkeitsdauer in Sekunden (1 Stunde)
+        Fields=None,
+        Conditions=conditions
+    )
+    return json.dumps(url)
+
+
 def put_image(tenant_id, id, body):
     image_key = get_image_key(tenant_id, id)
 

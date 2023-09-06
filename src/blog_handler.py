@@ -68,13 +68,15 @@ def handle_http_exception(exception: ValidationException):
     return response(exception.http_status, exception.to_json())
 
 
-@app.put('/api/blog/<id>/image')
-def put_img(id):
+@app.get('/api/blog/<id>/image')
+def request_put_img(id):
     event = app.current_event
     tenant_id = extract_tenant(event)
-    body = body = event.decoded_body
-    img_controller.put_image(tenant_id, id, body)
-    return empty_response(204)
+    response = img_controller.request_put_image(tenant_id, id)
+    return {
+        'statusCode': 201,
+        'body': response
+    }
 
 
 @app.delete('/api/blog/<id>/image')
