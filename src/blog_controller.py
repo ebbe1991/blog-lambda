@@ -1,4 +1,5 @@
 from blog_dto import BlogDTO, create
+import img_controller
 from lambda_utils.exception import UnknownIdException
 from datetime import date
 import dynamo_db_service
@@ -48,6 +49,8 @@ def get_blog_items(tenant_id: str, stichtag: date = None, count: int = None) -> 
 def delete_blog_item(tenant_id: str, id: str) -> bool:
     blog_item = get_blog_item(tenant_id, id)
     if blog_item:
+        if blog_item.hasPicture:
+            img_controller.delete_image(tenant_id, id)
         dynamo_db_service.delete_blog_item(tenant_id, id)
         return True
     else:
