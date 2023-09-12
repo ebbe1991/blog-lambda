@@ -50,8 +50,15 @@ class BlogDTO:
     def create_id(betreff: str, gueltigVon: date = None):
         if gueltigVon is None:
             gueltigVon = datetime.now()
-        
-        id = remove_special_characters(betreff.lower().replace(" ", "-"))
+
+        id = remove_special_characters(
+            betreff.lower()
+            .replace(" ", "-")
+            .replace("ä", "ae")
+            .replace("ü", "ue")
+            .replace("ö", "oe")
+            .replace("ß", "ss")
+        )
         return gueltigVon.strftime('%y%m%d')+'_'+urllib.parse.quote(id)
 
     def to_json(self):
