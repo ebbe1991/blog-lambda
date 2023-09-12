@@ -1,6 +1,7 @@
 import json
 from datetime import date, datetime
 import urllib.parse
+import re
 
 from lambda_utils.validation import check_required_field, check_daterange
 from lambda_utils.date_utils import compute_ttl_for_date, fromisoformat
@@ -49,10 +50,18 @@ class BlogDTO:
     def create_id(betreff: str, gueltigVon: date = None):
         if gueltigVon is None:
             gueltigVon = datetime.now()
-        return gueltigVon.strftime('%y%m%d')+'_'+urllib.parse.quote(betreff.lower().replace(" ", "-"))
+        
+        id = remove_special_characters(betreff.lower().replace(" ", "-"))
+        return gueltigVon.strftime('%y%m%d')+'_'+urllib.parse.quote(id)
 
     def to_json(self):
         return json.dumps(self.__dict__, cls=BlogDTOEncoder)
+
+
+def remove_special_characters(input_string):
+    # Entfernen Sie alle Zeichen außer Buchstaben, Zahlen und Bindestriche
+    cleaned_string = re.sub(r'[^a-zA-Z0-9-]', '', input_string)
+    return cleaned_string
 
 
 class BlogDTOEncoder(json.JSONEncoder):

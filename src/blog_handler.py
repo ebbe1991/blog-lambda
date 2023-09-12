@@ -5,6 +5,7 @@ from blog_controller import BlogDTO
 from lambda_utils.response_utils import response, empty_response, to_json_array
 from lambda_utils.event_utils import extract_body, extract_tenant, extract_stichtag, extract_count
 from lambda_utils.exception import ValidationException
+import urllib.parse
 app = APIGatewayHttpResolver()
 
 
@@ -23,6 +24,7 @@ def post():
 
 @app.put('/api/blog/<id>')
 def put(id):
+    id = urllib.parse.quote(id)
     event = app.current_event
     tenant_id = extract_tenant(event)
     body = extract_body(event)
@@ -32,6 +34,7 @@ def put(id):
 
 @app.get('/api/blog/<id>')
 def get(id):
+    id = urllib.parse.quote(id)
     event = app.current_event
     tenant_id = extract_tenant(event)
     blog_item = blog_controller.get_blog_item(tenant_id, id)
@@ -54,6 +57,7 @@ def getAll():
 
 @app.delete('/api/blog/<id>')
 def delete(id):
+    id = urllib.parse.quote(id)
     event = app.current_event
     tenant_id = extract_tenant(event)
     deleted = blog_controller.delete_blog_item(tenant_id, id)
@@ -70,6 +74,7 @@ def handle_http_exception(exception: ValidationException):
 
 @app.get('/api/blog/<id>/image')
 def request_put_img(id):
+    id = urllib.parse.quote(id)
     event = app.current_event
     tenant_id = extract_tenant(event)
     response = img_controller.request_put_image(tenant_id, id)
@@ -81,6 +86,7 @@ def request_put_img(id):
 
 @app.delete('/api/blog/<id>/image')
 def delete_img(id):
+    id = urllib.parse.quote(id)
     event = app.current_event
     tenant_id = extract_tenant(event)
     img_controller.delete_image(tenant_id, id)

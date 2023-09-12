@@ -8,9 +8,10 @@ def test_simple_id():
 
 
 def test_sonderzeichen():
-    id = blog_dto.BlogDTO.create_id("Mein+Text")
-    assert id == datetime.now().strftime('%y%m%d')+'_mein%2Btext'
+    id = blog_dto.BlogDTO.create_id("Mein-+Text")
+    assert id == datetime.now().strftime('%y%m%d')+'_mein-text'
+
 
 def test_with_date():
-    id = blog_dto.BlogDTO.create_id("Mein Text", date(2023, 1,1))
+    id = blog_dto.BlogDTO.create_id("Mein Text", date(2023, 1, 1))
     assert id == '230101_mein-text'
