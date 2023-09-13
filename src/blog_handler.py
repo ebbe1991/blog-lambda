@@ -1,6 +1,5 @@
 from aws_lambda_powertools.event_handler import APIGatewayHttpResolver
 import blog_controller
-import img_controller
 from blog_controller import BlogDTO
 from lambda_utils.response_utils import response, empty_response, to_json_array
 from lambda_utils.event_utils import extract_body, extract_tenant, extract_stichtag, extract_count
@@ -77,7 +76,7 @@ def request_put_img(id):
     id = urllib.parse.quote(id)
     event = app.current_event
     tenant_id = extract_tenant(event)
-    response = img_controller.request_put_image(tenant_id, id)
+    response = blog_controller.request_put_image(tenant_id, id)
     return {
         'statusCode': 201,
         'body': response
@@ -89,5 +88,5 @@ def delete_img(id):
     id = urllib.parse.quote(id)
     event = app.current_event
     tenant_id = extract_tenant(event)
-    img_controller.delete_image(tenant_id, id)
+    blog_controller.delete_image(tenant_id, id)
     return empty_response(204)
