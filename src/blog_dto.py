@@ -60,6 +60,10 @@ class BlogDTO:
             .replace("ß", "ss")
         )
         return gueltigVon.strftime('%y%m%d')+'_'+urllib.parse.quote(id)
+    
+    def to_id_json(self):
+        return json.dumps(self.id)
+    
 
     def to_json(self):
         return json.dumps(self.__dict__, cls=BlogDTOEncoder)

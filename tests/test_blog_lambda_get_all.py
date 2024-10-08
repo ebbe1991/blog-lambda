@@ -29,6 +29,15 @@ def test_get_blog_items_ok(lambda_context, dynamodb_table):
     assert len(body) == 2
 
 
+    response = blog_handler.handle(
+        event('/api/blog-ids', 'GET'), lambda_context)
+    body = extract_body(response)
+
+    assert extract_status_code(response) == 200
+    assert len(body) == 2
+    assert body == ['220101_test2', '220101_test']
+
+
 def test_get_blog_items_with_stichtag_ok(lambda_context, dynamodb_table):
     item1 = {
         'betreff': "Test",
@@ -52,6 +61,14 @@ def test_get_blog_items_with_stichtag_ok(lambda_context, dynamodb_table):
     assert extract_status_code(response) == 200
     assert len(body) == 1
     assert json.dumps(body[0]) == item2023.to_json()
+
+    response = blog_handler.handle(
+        event('/api/blog-ids', 'GET'), lambda_context)
+    body = extract_body(response)
+
+    assert extract_status_code(response) == 200
+    assert len(body) == 2
+    assert body == ['230101_test2', '220101_test']
 
 
 def test_get_blog_items_with_count_ok(lambda_context, dynamodb_table):
@@ -90,6 +107,14 @@ def test_get_blog_items_with_count_ok(lambda_context, dynamodb_table):
 def test_get_blog_items_empty_ok(lambda_context, dynamodb_table):
     response = blog_handler.handle(
         event('/api/blog', 'GET'), lambda_context)
+    body = extract_body(response)
+
+    assert extract_status_code(response) == 200
+    assert len(body) == 0
+
+
+    response = blog_handler.handle(
+        event('/api/blog-ids', 'GET'), lambda_context)
     body = extract_body(response)
 
     assert extract_status_code(response) == 200

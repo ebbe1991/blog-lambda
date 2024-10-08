@@ -53,6 +53,16 @@ def getAll():
     body = to_json_array(list(map(BlogDTO.to_json, blog_items)))
     return response(200, body)
 
+@app.get('/api/blog-ids')
+def getAllIds():
+    event = app.current_event
+    tenant_id = extract_tenant(event)
+    count = extract_count(event)
+    stichtag = extract_stichtag(event)
+    blog_items = blog_controller.get_blog_items(tenant_id, stichtag, count)
+    body = to_json_array(list(map(BlogDTO.to_id_json, blog_items)))
+    return response(200, body)
+
 
 @app.delete('/api/blog/<id>')
 def delete(id):

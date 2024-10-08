@@ -2,9 +2,11 @@
 
 ## Routen
 
-### Neuigkeit 
+### Blog 
 
 - POST api/blog
+- GET api/blog
+- GET api/blog-ids
 - GET api/blog/<id>
 - PUT api/blog/<id>
 - DELETE api/blog/<id>
