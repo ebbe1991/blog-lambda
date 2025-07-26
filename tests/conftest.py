@@ -2,7 +2,7 @@ import os
 
 import boto3
 import pytest
-from moto import mock_dynamodb, mock_s3
+from moto import mock_aws
 
 os.environ['BLOG_TABLE_NAME'] = 'BLOG_TABLE'
 os.environ['AWS_DEFAULT_REGION'] = 'us-east-1'
@@ -17,11 +17,11 @@ def lambda_context():
 
 @pytest.fixture(scope='session')
 def dynamodb():
-    with mock_dynamodb():
+    with mock_aws():
         yield boto3.resource('dynamodb')
 
 
-@mock_s3
+@mock_aws
 @pytest.fixture(scope='function')
 def s3_bucket():
     bucket = os.getenv('BLOG_S3_BUCKET')
